@@ -1,0 +1,37 @@
+.App .board {
+  width: 100vw;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.App .board .card {
+  height: 100px;
+  flex: 1;
+  flex-grow: 1;
+  margin: 1em 0 0 1em;
+  text-align: center;
+  background: darkred;
+  border: 1px solid #bbb;
+  border-radius: 12px;
+}
+
+.App .board .card.open {
+  background: #fff;
+}
+
+.App .board.row-2 .card {
+  flex: 0 0 33.333%;
+}
+
+.App .board.row-3 .card {
+  flex: 0 0 25%;
+}
+
+.App .board.row-4 .card {
+  flex: 0 0 20%;
+}
+
+.App .board.row-5 .card {
+  flex: 0 0 16.6666%;
+}
