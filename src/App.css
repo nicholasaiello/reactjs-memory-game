@@ -3,35 +3,45 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  font-family: 'Lato', sans-serif;
+  background: white url('/images/bg_pattern.png') 50% 50% repeat;
 }
 
 .App .board .card {
-  height: 100px;
+  height: 150px;
   flex: 1;
   flex-grow: 1;
   margin: 1em 0 0 1em;
   text-align: center;
-  background: darkred;
-  border: 1px solid #bbb;
-  border-radius: 12px;
+  background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
+  background-size: 100% 100%;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  -ms-box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
+  box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
 }
 
-.App .board .card.open {
-  background: #fff;
-}
+  .App .board .card.open {
+    background: #fff;
+  }
 
-.App .board.row-2 .card {
-  flex: 0 0 33.333%;
-}
+  .App .board.col-2 .card {
+    flex: 0 0 33.333%;
+  }
 
-.App .board.row-3 .card {
-  flex: 0 0 25%;
-}
+  .App .board.col-3 .card {
+    flex: 0 0 25%;
+  }
 
-.App .board.row-4 .card {
-  flex: 0 0 20%;
-}
+  .App .board.col-4 .card {
+    flex: 0 0 20%;
+  }
 
-.App .board.row-5 .card {
-  flex: 0 0 16.6666%;
-}
+  .App .board.col-5 .card {
+    flex: 0 0 16.6666%;
+  }
+
+  .App .board.col-6 .card {
+    flex: 0 0 14.286%;
+  }
