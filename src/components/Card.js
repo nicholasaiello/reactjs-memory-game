@@ -4,13 +4,17 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = { open: false, matched: false };
   }
 
   getValue = () => ( this.props.value )
 
   toggleOpen = () => {
     this.setState({ open: !this.state.open });
+  }
+
+  markAsMatched = () => {
+    this.setState({ matched: true });
   }
 
   handleClick = () => {
@@ -27,8 +31,8 @@ class Card extends Component {
       onClick = () => { this.handleClick() };
     
     if (this.state.open) {
-      body = this.props.value;
-      className += ' open';
+      body = (<div>{this.props.value}</div>);
+      className += ' open' + (this.state.matched ? ' matched' : '');
       onClick = () => {};
     }
 

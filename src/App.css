@@ -1,47 +1,98 @@
 .App .board {
-  width: 100vw;
+  width: 100%;
+  position: absolute;
+  /* same height as toolbar */
+  top: 56px;
+  bottom: 0;
+  z-index: 0;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  padding:  8px 0 8px 0;
   font-family: 'Lato', sans-serif;
-  background: white url('/images/bg_pattern.png') 50% 50% repeat;
+  background: #036d03 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAATklEQVQoU2NkYGAwZmBgOMuAACA+CKCIMSIpADGRNaEYgKwQ3WQUjTCF6CYhWw2WAynEpgjmIpg7jUlSiM0TWK2GWUOUZ7ApxggeogIcABHJFtftKVfJAAAAAElFTkSuQmCC') 50% 50% repeat;
 }
 
-.App .board .card {
-  height: 150px;
-  flex: 1;
-  flex-grow: 1;
-  margin: 1em 0 0 1em;
-  text-align: center;
-  background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
-  background-size: 100% 100%;
-  -ms-border-radius: 8px;
-  border-radius: 8px;
-  font-family: 'Montserrat', sans-serif;
-  -ms-box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
-  box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
+  .App .board #intro {
+    display: block;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+  } 
+
+    .App .board .card {
+    height: 150px;
+    flex: 1;
+    flex-grow: 1;
+    margin: 0.25em 0.5em 0 0.5em;
+    text-align: center;
+    background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
+    background-size: 100% 100%;
+    -ms-border-radius: 8px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    -ms-box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
+    box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
+    cursor: pointer;
+    }
+
+    .App .board .card.open {
+      background: radial-gradient(circle at center, #fff 0, #f5f5f5, #ddd 90%);
+      cursor: default;
+
+      animation: shake 3s cubic-bezier(.36,.07,.19,.97) both;
+      animation-iteration-count:  999;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    .App .board .card.open.matched {
+      background: radial-gradient(circle at center, #ddd 0, #ccc, #aaa 90%);
+
+      animation: none;
+    }
+
+    .App .board.col-2 .card {
+      flex: 0 0 33.333%;
+    }
+
+    .App .board.col-3 .card {
+      flex: 0 0 25%;
+    }
+
+    .App .board.col-4 .card {
+      flex: 0 0 20%;
+    }
+
+    .App .board.col-5 .card {
+      flex: 0 0 16.6666%;
+    }
+
+    .App .board.col-6 .card {
+      flex: 0 0 14.286%;
+    }
+
+      .App .board .card > div {
+        font-size: 48px;
+        line-height: 150px;
+        color: #222;
+      }
+
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
 }
-
-  .App .board .card.open {
-    background: #fff;
-  }
-
-  .App .board.col-2 .card {
-    flex: 0 0 33.333%;
-  }
-
-  .App .board.col-3 .card {
-    flex: 0 0 25%;
-  }
-
-  .App .board.col-4 .card {
-    flex: 0 0 20%;
-  }
-
-  .App .board.col-5 .card {
-    flex: 0 0 16.6666%;
-  }
-
-  .App .board.col-6 .card {
-    flex: 0 0 14.286%;
-  }

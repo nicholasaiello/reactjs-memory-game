@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 
 import Deck from './Deck';
 import Card from './Card';
@@ -13,22 +12,23 @@ class GameBoard extends Component {
     super(props);
     this.state = { 
       dialogOpen: false,
+      attempts: 0,
       chosenCards:[], 
       matches: [], 
       deck: null, 
-      started: false
+      started: props.gameStarted
     };
   }
 
   componentDidMount = () => {
-    this.initGame();
+
   }
 
   componentWillUnmount = () => {
     
   }
 
-  initGame = () => {
+  startGame = () => {
     let deck = new Deck(this.props.rows * this.props.columns);
     deck.deal();
 
@@ -39,7 +39,11 @@ class GameBoard extends Component {
     let deck = this.state.deck;
     deck.redeal();
 
-    this.setState({ chosenCards:[], matches: [], deck: deck, started: true });
+    this.setState({ attempts: 0, chosenCards:[], matches: [], deck: deck, started: true });
+  }
+
+  endGame = () => {
+    this.setState({ attempts: 0, chosenCards:[], matches: [], deck: null, started: true });
   }
 
   hasWonGame = () => (
@@ -48,40 +52,6 @@ class GameBoard extends Component {
 
   showDialog = (copy) => {
     this.setState({ dialogOpen: true, dialogCopy: copy });
-  }
-
-  _checkGameState = () => {
-    console.log('_checkGameState', this.state.chosenCards);
-    let state = this.state;
-
-    if (state.chosenCards.length === this.props.matchSetSize) {
-      let card1 = state.chosenCards[0],
-        card2 = state.chosenCards[1];
-
-      if (card1.getValue() === card2.getValue()) {
-        let matches = state.matches;
-        matches = matches.concat(state.chosenCards);
-        this.setState({matches: matches, chosenCards: []});
-        
-        setTimeout(() => {
-          this.showDialog('You got a match!');
-        }, 250);
-      } else {
-        this.setState({chosenCards: []});
-        setTimeout(() => {
-          // this.showDialog('Not a match. Try again.');
-          card1.toggleOpen();
-          card2.toggleOpen();
-        }, 500);
-      }
-    }
-
-    if (this.hasWonGame()) { // GAME OVER
-      this.setState({ started: false });
-      if (window.confirm("You won! Would you like to play again?")) {
-        this.redeal();
-      }
-    }
   }
 
   handleCardClick = (card) => {
@@ -100,35 +70,85 @@ class GameBoard extends Component {
     this.setState({dialogOpen: false});
   }
 
+  _checkGameState = () => {
+    let state = this.state;
+    if (!state.deck && !state.started && this.props.gameStarted) {  // game started
+      this.startGame();
+      return;
+    } else if (state.started && !this.props.gameStarted) {  // game ended
+      this.endGame();
+      return;
+    }
+
+    if (state.chosenCards.length === this.props.matchSetSize) {
+      let card1 = state.chosenCards[0],
+        card2 = state.chosenCards[1];
+
+      if (card1.getValue() === card2.getValue()) {
+        let matches = state.matches;
+        matches = matches.concat(state.chosenCards);
+        this.setState({matches: matches, chosenCards: []});
+
+        card1.markAsMatched();
+        card2.markAsMatched();
+
+        setTimeout(() => {
+          this.props.onStatsChange({
+            attempts: this.state.attempts,
+            matches: (this.state.matches.length / this.props.matchSetSize) >> 0
+          });
+          this.showDialog('You got a match!');
+        }, 500);
+      } else {
+        let attempts = this.state.attempts + 1;
+        this.setState({attempts: attempts, chosenCards: []});
+        this.props.onStatsChange({
+          attempts: attempts,
+          matches: (this.state.matches.length / this.props.matchSetSize) >> 0
+        });
+
+        setTimeout(() => {
+          // this.showDialog('Not a match. Try again.');
+          card1.toggleOpen();
+          card2.toggleOpen();
+        }, 500);
+      }
+    }
+
+    if (this.hasWonGame()) { // GAME OVER
+      this.setState({ started: false });
+      setTimeout(() => {
+        if (window.confirm("You won! Would you like to play again?")) {
+          this.restartGame();
+        }
+      }, 500);
+    }
+  }
+
   render() {
 
     this._checkGameState();
 
-    const actions = [
-      <FlatButton
-        label={"Keep Playing"}
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.handleDialogClose}
-      />
-    ];
-
-    const cards = this.state.deck != null 
-      ? this.state.deck.cards.map((n, i) => (
+    let body;
+    if (this.state.deck !== null) {
+      body = this.state.deck.cards.map((n, i) => (
         <Card key={i} value={n} index={i} onClick={(card) => this.handleCardClick(card)} />
-      )) : '';
+      ));
+    } else {
+      body = (<section id="intro">
+        <h1>{"Welcome to the Memory Game!"}</h1>
+        <p>{"Match all pairs & win. Press above to get started!"}</p>
+      </section>);
+    }
 
     return (
       <div className={`board col-${this.props.columns}`}>
-        {cards}
-        <Dialog
-          title={"ReactJS Memory Game"}
-          actions={actions}
-          modal={false}
+        {body}
+        <Snackbar
           open={this.state.dialogOpen}
-          onRequestClose={this.handleDialogClose}>
-          {this.state.dialogCopy}
-        </Dialog>
+          message={this.state.dialogCopy}
+          autoHideDuration={4000}
+          onRequestClose={this.handleDialogClose} />
       </div>
     )
   }
@@ -136,7 +156,7 @@ class GameBoard extends Component {
 };
 
 /**
- * // @props limit: max card value, if M = columns and N = rows * columns, M < limit < N
+ * limit: max card value, if M = columns and N = rows * columns, M < limit < N
  */
 GameBoard.defaultProps = {
   rows: 4,
