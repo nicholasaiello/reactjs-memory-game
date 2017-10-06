@@ -82,16 +82,17 @@ class GameBoard extends Component {
         matches = matches.concat(state.chosenCards);
         this.setState({matches: matches, chosenCards: []});
 
-        card1.markAsMatched();
-        card2.markAsMatched();
+        this.showSnackbar('You got a match!');
 
         setTimeout(() => {
+          card1.markAsMatched();
+          card2.markAsMatched();
+          
           this.props.onStatsChange({
             attempts: this.state.attempts,
             matches: (this.state.matches.length / this.props.matchSetSize) >> 0
           });
-          this.showSnackbar('You got a match!');
-        }, 500);
+        }, 1500);
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});

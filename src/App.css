@@ -60,6 +60,8 @@
     }
 
     .App .board .card.open.matched {
+      /* rules state cards should disappear */
+      display: none;
       background: radial-gradient(circle at center, #ddd 0, #ccc, #aaa 90%);
 
       animation: none;
