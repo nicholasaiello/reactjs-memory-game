@@ -6,8 +6,6 @@ class Deck {
     this._size = size;
     this._matchSetSize = matchSetSize;
     this._cards = Array(size);
-
-    console.debug(this._cards);
   }
 
   get cards() {
