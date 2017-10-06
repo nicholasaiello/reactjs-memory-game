@@ -5,6 +5,7 @@ import Chip from 'material-ui/Chip';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
+// TODO move to stylesheet
 const styles = {
   chip: {
     margin: '0 4px 0 24px',
@@ -17,7 +18,7 @@ const styles = {
   }
 };
 
-const AppToolbar = ({ gameStarted, gameStats = {}, onStartClick, onEndClick }) => {
+const AppToolbar = ({ gameStarted, stats = {}, onStartClick, onEndClick }) => {
 
   let actions;
   if (!gameStarted) {
@@ -36,7 +37,7 @@ const AppToolbar = ({ gameStarted, gameStats = {}, onStartClick, onEndClick }) =
           backgroundColor={'#eefbff'}
           style={styles.chip}>
           <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
-            {gameStats.attempts || 0}
+            {stats.attempts || 0}
           </Avatar>
           {"Attempts"}
         </Chip>
@@ -44,7 +45,7 @@ const AppToolbar = ({ gameStarted, gameStats = {}, onStartClick, onEndClick }) =
           backgroundColor={'#eefbff'}
           style={styles.chip}>
           <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
-            {gameStats.matches || 0}
+            {stats.matches || 0}
           </Avatar>
           {"Matches"}
         </Chip>

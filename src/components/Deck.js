@@ -28,21 +28,19 @@ class Deck {
     if (shuffle) {
       this._cards = this.shuffle();
     }
-
-    console.debug(this._cards);
   }
 
-  shuffle(shuffles = 5) {
+  shuffle(shuffles = 7) {
     let shuffled = this._cards.slice(),
       size = shuffled.length;
 
     for (let i = 0; i < shuffles; i++) {
-        for ( let j = 0; j < size; j++) {
-            let rand = Math.floor(Math.random() * size);
-            let value = shuffled[j];
-            shuffled[j] = shuffled[rand];
-            shuffled[rand] = value;
-        }
+      shuffled.map((value, j) => {
+        let rand = Math.floor(Math.random() * size);
+
+        shuffled[j] = shuffled[rand];
+        shuffled[rand] = value;
+      });
     }
 
     return shuffled;

@@ -4,10 +4,14 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false, matched: false };
+    this.state = this.initialState;
   }
 
-  getValue = () => ( this.props.value )
+  get initialState() {
+    return { open: false, matched: false };
+  }
+
+  get value () { return this.props.value }
 
   toggleOpen = () => {
     this.setState({ open: !this.state.open });
@@ -41,6 +45,7 @@ class Card extends Component {
         {body}
       </div>
     );
+
   }
 
 };

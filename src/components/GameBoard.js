@@ -10,14 +10,16 @@ class GameBoard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = { ...this.initialState, gamesPlayed: 0, deck: null, started: props.gameStarted };
+  }
+
+  get initialState() {
+    return {
       snackbarOpen: false,
       snackbarCopy: '',
       attempts: 0,
       chosenCards:[], 
-      matches: [], 
-      deck: null, 
-      started: props.gameStarted
+      matches: []
     };
   }
 
@@ -36,11 +38,18 @@ class GameBoard extends Component {
     let deck = new Deck(this.props.rows * this.props.columns);
     deck.deal();
 
-    this.setState({ attempts: 0, chosenCards:[], matches: [], deck: deck, started: true });
+    this.setState({ 
+      ...this.initialState, 
+      gamesPlayed: (this.state.gamesPlayed + 1), 
+      deck: deck, 
+      started: false 
+    });
+
+    this.handleStatsChanged();
   }
 
   endGame = () => {
-    this.setState({attempts: 0, chosenCards:[], matches: [], deck: null, started: false });
+    this.setState({ ...this.initialState, deck: null, started: false });
   }
 
   showSnackbar = (copy) => {
@@ -59,17 +68,25 @@ class GameBoard extends Component {
     this.setState({ chosenCards: chosenCards });
   }
 
+  handleStatsChanged = () => {
+    this.props.onStatsChange({
+      attempts: this.state.attempts,
+      matches: (this.state.matches.length / this.props.matchSetSize) >> 0
+    });
+  }
+
   handleSnackbarHide = () => {
     this.setState({snackbarOpen: false});
   }
 
   _checkGameState = () => {
     let state = this.state;
+
     if (!state.deck && !state.started && this.props.gameStarted) {  // game started
       this.startGame();
       return;
     } else if (state.started && !this.props.gameStarted) {  // game ended
-      this.endGame();
+      this.restartGame();
       return;
     }
 
@@ -77,35 +94,29 @@ class GameBoard extends Component {
       let card1 = state.chosenCards[0],
         card2 = state.chosenCards[1];
 
-      if (card1.getValue() === card2.getValue()) {
+      if (card1.value === card2.value) {
+        this.showSnackbar('You got a match!');
+
         let matches = state.matches;
         matches = matches.concat(state.chosenCards);
         this.setState({matches: matches, chosenCards: []});
 
-        this.showSnackbar('You got a match!');
+        this.handleStatsChanged();
 
         setTimeout(() => {
           card1.markAsMatched();
           card2.markAsMatched();
-          
-          this.props.onStatsChange({
-            attempts: this.state.attempts,
-            matches: (this.state.matches.length / this.props.matchSetSize) >> 0
-          });
-        }, 1500);
+        }, this.props.matchedTimeout);
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});
-        this.props.onStatsChange({
-          attempts: attempts,
-          matches: (this.state.matches.length / this.props.matchSetSize) >> 0
-        });
+        this.handleStatsChanged();
 
         setTimeout(() => {
           // this.showSnackbar('Not a match. Try again.');
           card1.toggleOpen();
           card2.toggleOpen();
-        }, 500);
+        }, this.props.defaultTimeout);
       }
     }
 
@@ -115,7 +126,7 @@ class GameBoard extends Component {
         if (window.confirm("You won! Would you like to play again?")) {
           this.restartGame();
         }
-      }, 500);
+      }, this.props.defaultTimeout);
     }
   }
 
@@ -123,10 +134,15 @@ class GameBoard extends Component {
 
     this._checkGameState();
 
-    let body;
-    if (this.state.deck !== null) {
-      body = this.state.deck.cards.map((n, i) => (
-        <Card key={i} value={n} index={i} onClick={(card) => this.handleCardClick(card)} />
+    let state = this.state, body;
+
+    if (state.deck !== null) {
+      body = state.deck.cards.map((n, i) => (
+        <Card 
+          key={i + (state.deck.size * state.gamesPlayed)}
+          value={n}
+          index={i} 
+          onClick={(card) => this.handleCardClick(card)} />
       ));
     } else {
       body = (<section id="intro">
@@ -139,8 +155,8 @@ class GameBoard extends Component {
       <div className={`board col-${this.props.columns}`}>
         {body}
         <Snackbar
-          open={this.state.snackbarOpen}
-          message={this.state.snackbarCopy}
+          open={state.snackbarOpen}
+          message={state.snackbarCopy}
           autoHideDuration={4000}
           onRequestClose={this.handleSnackbarHide} />
       </div>
@@ -156,7 +172,9 @@ GameBoard.defaultProps = {
   rows: 4,
   columns: 6,
   limit: 12,
-  matchSetSize: 2
+  matchSetSize: 2,
+  matchedTimeout: 1500,
+  defaultTimeout: 500
 };
 
 export default GameBoard;

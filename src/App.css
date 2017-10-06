@@ -33,13 +33,23 @@
     margin: auto;
     text-align: center;
     color: #fff;
+    background: #111;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid #444;
+    box-shadow: #222 0px 0px 5px 0px;
+    cursor: default;
   } 
+
+    .App .board #intro h1 {
+      color: #ccc;
+    }
 
     .App .board .card {
       height: 150px;
       flex: 1;
       flex-grow: 1;
-      margin: 0.25em 0.5em 0 0.5em;
+      margin: 0.5em 0.5em 0 0.5em;
       text-align: center;
       background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
       background-size: 100% 100%;
@@ -119,7 +129,12 @@
   }
 
   .App .board .card {
+    height: 130px;
     margin: 0.2em 0.2em 0 0.2em;
+  }
+
+  .App .board .card > div {
+    line-height: 130px;
   }
 }
 
@@ -130,12 +145,28 @@
   }
 
   .App .board .card {
-    height: 125px;
+    height: 120px;
     margin: 0 0.1em 0 0.1em;
   }
 
   .App .board .card > div {
     font-size: 16px !important;
-    line-height: 125px;
+    line-height: 120px;
+  }
+}
+
+@media(max-width: 480px) {
+  .App .toolbar .toolbar-title {
+    display: none;
+  }
+
+  .App .board .card {
+    height: 110px;
+    margin: 0 0.1em 0 0.1em;
+  }
+
+  .App .board .card > div {
+    font-size: 16px !important;
+    line-height: 110px;
   }
 }
