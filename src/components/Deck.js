@@ -21,7 +21,7 @@ class Deck {
   deal(shuffle = true) {
     let matches = this._size / this._matchSetSize;
     this._cards = this._cards.fill(0).map((n, i) => (
-        i % matches
+        (i % matches) + 1  // no zeros
       )
     )
 

@@ -6,13 +6,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 const styles = {
-  title: {
-    marginLeft: '16px'
-  },
   chip: {
     margin: '0 4px 0 24px',
     color: '#fff',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    fontFamily: "'Lato', sans-serif"
   },
   button: {
     marginRight: '0px'
@@ -35,17 +33,17 @@ const AppToolbar = ({ gameStarted, gameStats = {}, onStartClick, onEndClick }) =
     actions = (<ToolbarGroup>
       <ToolbarSeparator />
         <Chip
-          backgroundColor={'lightblue'}
+          backgroundColor={'#eefbff'}
           style={styles.chip}>
-          <Avatar size={32} color={'lightblue'} backgroundColor={'darkblue'}>
+          <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
             {gameStats.attempts || 0}
           </Avatar>
           {"Attempts"}
         </Chip>
         <Chip
-          backgroundColor={'lightblue'}
+          backgroundColor={'#eefbff'}
           style={styles.chip}>
-          <Avatar size={32} color={'lightblue'} backgroundColor={'darkblue'}>
+          <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
             {gameStats.matches || 0}
           </Avatar>
           {"Matches"}
@@ -60,9 +58,9 @@ const AppToolbar = ({ gameStarted, gameStats = {}, onStartClick, onEndClick }) =
   }
 
   return (
-    <Toolbar style={{zIndex: 2}}>
+    <Toolbar className={"toolbar"}>
         <ToolbarGroup firstChild={true}>
-          <ToolbarTitle text={"ReactJS Memory Game"} style={styles.title} />
+          <ToolbarTitle className={"toolbar-title"} text={"ReactJS Memory Game"} />
         </ToolbarGroup>
         {actions}
       </Toolbar>

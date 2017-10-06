@@ -11,7 +11,8 @@ class GameBoard extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      dialogOpen: false,
+      snackbarOpen: false,
+      snackbarCopy: '',
       attempts: 0,
       chosenCards:[], 
       matches: [], 
@@ -20,13 +21,9 @@ class GameBoard extends Component {
     };
   }
 
-  componentDidMount = () => {
-
-  }
-
-  componentWillUnmount = () => {
-    
-  }
+  hasWonGame = () => (
+    this.state.started && this.state.matches.length === (this.state.deck || []).size
+  )
 
   startGame = () => {
     let deck = new Deck(this.props.rows * this.props.columns);
@@ -36,22 +33,18 @@ class GameBoard extends Component {
   }
 
   restartGame = () => {
-    let deck = this.state.deck;
-    deck.redeal();
+    let deck = new Deck(this.props.rows * this.props.columns);
+    deck.deal();
 
     this.setState({ attempts: 0, chosenCards:[], matches: [], deck: deck, started: true });
   }
 
   endGame = () => {
-    this.setState({ attempts: 0, chosenCards:[], matches: [], deck: null, started: true });
+    this.setState({attempts: 0, chosenCards:[], matches: [], deck: null, started: false });
   }
 
-  hasWonGame = () => (
-    this.state.started && this.state.matches.length === (this.state.deck || []).size
-  )
-
-  showDialog = (copy) => {
-    this.setState({ dialogOpen: true, dialogCopy: copy });
+  showSnackbar = (copy) => {
+    this.setState({ snackbarOpen: true, snackbarCopy: copy });
   }
 
   handleCardClick = (card) => {
@@ -66,8 +59,8 @@ class GameBoard extends Component {
     this.setState({ chosenCards: chosenCards });
   }
 
-  handleDialogClose = () => {
-    this.setState({dialogOpen: false});
+  handleSnackbarHide = () => {
+    this.setState({snackbarOpen: false});
   }
 
   _checkGameState = () => {
@@ -97,7 +90,7 @@ class GameBoard extends Component {
             attempts: this.state.attempts,
             matches: (this.state.matches.length / this.props.matchSetSize) >> 0
           });
-          this.showDialog('You got a match!');
+          this.showSnackbar('You got a match!');
         }, 500);
       } else {
         let attempts = this.state.attempts + 1;
@@ -108,7 +101,7 @@ class GameBoard extends Component {
         });
 
         setTimeout(() => {
-          // this.showDialog('Not a match. Try again.');
+          // this.showSnackbar('Not a match. Try again.');
           card1.toggleOpen();
           card2.toggleOpen();
         }, 500);
@@ -145,10 +138,10 @@ class GameBoard extends Component {
       <div className={`board col-${this.props.columns}`}>
         {body}
         <Snackbar
-          open={this.state.dialogOpen}
-          message={this.state.dialogCopy}
+          open={this.state.snackbarOpen}
+          message={this.state.snackbarCopy}
           autoHideDuration={4000}
-          onRequestClose={this.handleDialogClose} />
+          onRequestClose={this.handleSnackbarHide} />
       </div>
     )
   }

@@ -1,3 +1,18 @@
+/**
+ * GameBoard and Card styles
+ */
+
+.App .toolbar {
+  z-index: 2;
+}
+
+  .App .toolbar .toolbar-title {
+    margin-left: 16px;
+    font-weight: 800;
+    font-size: 20px !important;
+    color: #333 !important;
+  }  
+
 .App .board {
   width: 100%;
   position: absolute;
@@ -21,19 +36,17 @@
   } 
 
     .App .board .card {
-    height: 150px;
-    flex: 1;
-    flex-grow: 1;
-    margin: 0.25em 0.5em 0 0.5em;
-    text-align: center;
-    background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
-    background-size: 100% 100%;
-    -ms-border-radius: 8px;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    -ms-box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
-    box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
-    cursor: pointer;
+      height: 150px;
+      flex: 1;
+      flex-grow: 1;
+      margin: 0.25em 0.5em 0 0.5em;
+      text-align: center;
+      background: #333 url('/images/suxcard.png') 50% 50% no-repeat;
+      background-size: 100% 100%;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: rgba(0,0,0,0.25) 0 1px 6px 0px;
+      cursor: pointer;
     }
 
     .App .board .card.open {
@@ -94,5 +107,33 @@
 
   40%, 60% {
     transform: translate3d(2px, 0, 0);
+  }
+}
+
+@media(max-width: 768px) {
+  .App .toolbar .toolbar-title {
+    font-size: 18px !important;
+    margin-left: 10px;
+  }
+
+  .App .board .card {
+    margin: 0.2em 0.2em 0 0.2em;
+  }
+}
+
+@media(max-width: 624px) {
+  .App .toolbar .toolbar-title {
+    font-size: 14px !important;
+    margin-left: 8px;
+  }
+
+  .App .board .card {
+    height: 125px;
+    margin: 0 0.1em 0 0.1em;
+  }
+
+  .App .board .card > div {
+    font-size: 16px !important;
+    line-height: 125px;
   }
 }
