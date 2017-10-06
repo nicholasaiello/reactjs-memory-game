@@ -89,7 +89,8 @@ class GameBoard extends Component {
       this.restartGame();
       return;
     }
-
+    
+    // we have a pair
     if (state.chosenCards.length === this.props.matchSetSize) {
       let card1 = state.chosenCards[0],
         card2 = state.chosenCards[1];
@@ -101,21 +102,20 @@ class GameBoard extends Component {
         matches = matches.concat(state.chosenCards);
         this.setState({matches: matches, chosenCards: []});
 
-        this.handleStatsChanged();
-
         setTimeout(() => {
           card1.markAsMatched();
           card2.markAsMatched();
+          this.handleStatsChanged();
         }, this.props.matchedTimeout);
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});
-        this.handleStatsChanged();
 
         setTimeout(() => {
           // this.showSnackbar('Not a match. Try again.');
           card1.toggleOpen();
           card2.toggleOpen();
+          this.handleStatsChanged();
         }, this.props.defaultTimeout);
       }
     }
