@@ -16,9 +16,9 @@ let CurrentGame = null;
 
 const AppContainer = ({games, stats, createNewGame, endCurrentGame, wonCurrentGame, updateStats}) => {
   
-  if (!CurrentGame || games.changed && 
+  if (!CurrentGame || (games.changed && 
         ((games.state === GameStates.ACTIVE && games.prevState !== games.state) ||  // new game
-          (games.prevState === GameStates.ACTIVE && games.prevState !== games.state))) {  // end game
+          (games.prevState === GameStates.ACTIVE && games.prevState !== games.state)))) {  // end game
     CurrentGame = () => (
       <GameBoard
         gameState={games}

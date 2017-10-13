@@ -1,7 +1,7 @@
-import { DEFAULT_CARD, FLIP_CARD, MATCH_CARD, NO_MATCH_CARD } from '../constants/ActionTypes';
+import { NEW_GAME, DEFAULT_CARD, FLIP_CARD, MATCH_CARD, NO_MATCH_CARD } from '../constants/ActionTypes';
 
 
-const initialState = {};
+const initialState = [];
 
 export default function cards(state = initialState, action) {
 
@@ -14,6 +14,8 @@ export default function cards(state = initialState, action) {
       return {};
     case NO_MATCH_CARD:
       return {};
+    case NEW_GAME:
+      return [];
     default:
       return state;
   }
