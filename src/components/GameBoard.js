@@ -5,12 +5,14 @@ import Snackbar from 'material-ui/Snackbar';
 import Deck from './Deck';
 import Card from './Card';
 
+import * as GameStates from '../constants/GameStates';
+
 
 class GameBoard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...this.initialState, gamesPlayed: 0, deck: null, started: props.gameStarted };
+    this.state = { ...this.initialState, gamesPlayed: 0, deck: null};
   }
 
   get initialState() {
@@ -23,15 +25,19 @@ class GameBoard extends Component {
     };
   }
 
+  isGameActive = () => (
+    this.props.gameState.state === GameStates.ACTIVE
+  )
+
   hasWonGame = () => (
-    this.state.started && this.state.matches.length === (this.state.deck || []).size
+    this.isGameActive() && this.state.matches.length === (this.state.deck || []).size
   )
 
   startGame = () => {
     let deck = new Deck(this.props.rows * this.props.columns);
     deck.deal();
 
-    this.setState({ deck: deck, started: true });
+    this.setState({ deck: deck });
   }
 
   restartGame = () => {
@@ -41,15 +47,12 @@ class GameBoard extends Component {
     this.setState({ 
       ...this.initialState, 
       gamesPlayed: (this.state.gamesPlayed + 1), 
-      deck: deck, 
-      started: false 
+      deck: deck
     });
-
-    this.handleStatsChanged();
   }
 
   endGame = () => {
-    this.setState({ ...this.initialState, deck: null, started: false });
+    this.setState({ ...this.initialState, deck: null });
   }
 
   showSnackbar = (copy) => {
@@ -68,11 +71,8 @@ class GameBoard extends Component {
     this.setState({ chosenCards: chosenCards });
   }
 
-  handleStatsChanged = () => {
-    this.props.onStatsChange({
-      attempts: this.state.attempts,
-      matches: (this.state.matches.length / this.props.matchSetSize) >> 0
-    });
+  handleStatChanged = (stat, value) => {
+    this.props.onUpdateStats(stat, value);
   }
 
   handleSnackbarHide = () => {
@@ -82,11 +82,8 @@ class GameBoard extends Component {
   _checkGameState = () => {
     let state = this.state;
 
-    if (!state.deck && !state.started && this.props.gameStarted) {  // game started
+    if (!state.deck && this.isGameActive()) {  // game started
       this.startGame();
-      return;
-    } else if (state.started && !this.props.gameStarted) {  // game ended
-      this.restartGame();
       return;
     }
     
@@ -105,27 +102,23 @@ class GameBoard extends Component {
         setTimeout(() => {
           card1.markAsMatched();
           card2.markAsMatched();
-          this.handleStatsChanged();
+          this.handleStatChanged('matches', this.state.matches.length / this.props.matchSetSize);
         }, this.props.matchedTimeout);
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});
-
+  
         setTimeout(() => {
-          // this.showSnackbar('Not a match. Try again.');
           card1.toggleOpen();
           card2.toggleOpen();
-          this.handleStatsChanged();
+          this.handleStatChanged('attempts', this.state.attempts);
         }, this.props.defaultTimeout);
       }
     }
 
     if (this.hasWonGame()) { // GAME OVER
-      this.setState({ started: false });
       setTimeout(() => {
-        if (window.confirm("You won! Would you like to play again?")) {
-          this.restartGame();
-        }
+        this.props.onWonGame();
       }, this.props.defaultTimeout);
     }
   }

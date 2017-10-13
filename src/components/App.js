@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
-import AppToolbar from './AppToolbar';
+import AppToolbar from '../components/AppToolbar';
 import GameBoard from './GameBoard';
+
+import * as GameStates from '../constants/GameStates';
 
 import '../App.css';
 
@@ -10,7 +12,10 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { stats: {}, gameStarted: props.startGame || false };
+    this.state = {
+      
+    };
+    console.log(props);
   }
 
   componentWillMount = () => {
@@ -19,40 +24,32 @@ class App extends Component {
 
   newGame () {
     this.setState({
-      stats: {},
-      gameStarted: false,
       game: () => (<GameBoard 
-        gameStarted={this.state.gameStarted} 
-        onRestartGame={() => this.handleOnGameEnd()}
-        onStatsChange={this.handleOnGameStatsChange} />)
+        gameState={this.props.gameState} />)
     });
   }
 
-  handleOnGameStart = () => {
-    this.setState({ gameStarted: true });
-  }
+  // handleOnGameStart = () => {
+  //   // this.setState({ gameStarted: true });
+  // }
 
-  handleOnGameEnd = () => {
-    if (window.confirm('Are you sure you want to stop playing?')) {
-      setTimeout(() => {
-        this.newGame();
-      }, 1);
-    }
-  }
+  // handleOnGameEnd = () => {
+  //   if (window.confirm('Are you sure you want to stop playing?')) {
+  //     setTimeout(() => {
+  //       this.newGame();
+  //     }, 1);
+  //   }
+  // }
 
-  handleOnGameStatsChange = (stats) => {
-    this.setState({ stats: stats });
-  }
+  // handleOnGameStatsChange = (stats) => {
+  //   this.setState({ stats: stats });
+  // }
 
   render() {
     const CurrentGame = this.state.game;
     return (
-      <div className={'App' + (this.state.gameStarted ? ' started' : '')}>
-        <AppToolbar 
-          stats={this.state.stats}
-          gameStarted={this.state.gameStarted}
-          onStartClick={() => this.handleOnGameStart()} 
-          onEndClick={() => this.handleOnGameEnd()} />
+      <div className={'App' + (this.props.gameState ? ' started' : '')}>
+        <AppToolbar  />
         <CurrentGame />
       </div>
     );

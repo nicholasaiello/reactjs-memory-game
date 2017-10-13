@@ -5,28 +5,17 @@ import Chip from 'material-ui/Chip';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
-// TODO move to stylesheet
-const styles = {
-  chip: {
-    margin: '0 4px 0 24px',
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontFamily: "'Lato', sans-serif"
-  },
-  button: {
-    marginRight: '0px'
-  }
-};
+import * as GameStates from '../constants/GameStates';
 
-const AppToolbar = ({ gameStarted, stats = {}, onStartClick, onEndClick }) => {
+const AppToolbar = ({ gameState, stats = {}, onStartClick, onEndClick }) => {
 
   let actions;
-  if (!gameStarted) {
+  if (gameState !== GameStates.ACTIVE) {
     actions = (<ToolbarGroup>
       <ToolbarSeparator />
       <RaisedButton 
+          className={"toolbar-btn"}
           label={"Start a Game"}
-          style={styles.button} 
           primary={true}
           onClick={onStartClick} />
       </ToolbarGroup>);
@@ -34,16 +23,16 @@ const AppToolbar = ({ gameStarted, stats = {}, onStartClick, onEndClick }) => {
     actions = (<ToolbarGroup>
       <ToolbarSeparator />
         <Chip
-          backgroundColor={'#eefbff'}
-          style={styles.chip}>
+          className={"toolbar-chip"}
+          backgroundColor={'#eefbff'}>
           <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
             {stats.attempts || 0}
           </Avatar>
           {"Attempts"}
         </Chip>
         <Chip
-          backgroundColor={'#eefbff'}
-          style={styles.chip}>
+          className={"toolbar-chip"}
+          backgroundColor={'#eefbff'}>
           <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
             {stats.matches || 0}
           </Avatar>
@@ -51,8 +40,8 @@ const AppToolbar = ({ gameStarted, stats = {}, onStartClick, onEndClick }) => {
         </Chip>
         <ToolbarSeparator />
         <RaisedButton 
+          className={"toolbar-btn"}
           label={"End Game"}
-          style={styles.button} 
           primary={false}
           onClick={onEndClick} />
       </ToolbarGroup>);

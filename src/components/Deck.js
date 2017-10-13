@@ -33,7 +33,7 @@ class Deck {
       size = shuffled.length;
 
     for (let i = 0; i < shuffles; i++) {
-      shuffled.map((value, j) => {
+      shuffled.forEach((value, j) => {
         let rand = Math.floor(Math.random() * size);
 
         shuffled[j] = shuffled[rand];

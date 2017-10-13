@@ -11,7 +11,18 @@
     font-weight: 800;
     font-size: 20px !important;
     color: #333 !important;
-  }  
+  }
+
+  .App .toolbar .toolbar-chip {
+    margin: 0 4px 0 24px !important;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: 'Lato', sans-serif !important;
+  }
+
+  .App .toolbar .toolbar-btn {
+    margin-right: 0px !important;
+  }
 
 .App .board {
   width: 100%;
