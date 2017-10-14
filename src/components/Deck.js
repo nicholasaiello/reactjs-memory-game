@@ -7,13 +7,13 @@ class Deck {
     this._matchSetSize = matchSetSize;
     this._cards = Array(size);
   }
-
+  
   get cards() {
-    return this._cards;  
+    return this._cards;
   }
 
   get size() {
-    return this._size;  
+    return this._size;
   }
 
   deal(shuffle = true) {

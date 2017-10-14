@@ -20,7 +20,7 @@ class GameBoard extends Component {
       snackbarOpen: false,
       snackbarCopy: '',
       attempts: 0,
-      chosenCards:[], 
+      chosenCards:[],
       matches: []
     };
   }
@@ -44,9 +44,9 @@ class GameBoard extends Component {
     let deck = new Deck(this.props.rows * this.props.columns);
     deck.deal();
 
-    this.setState({ 
-      ...this.initialState, 
-      gamesPlayed: (this.state.gamesPlayed + 1), 
+    this.setState({
+      ...this.initialState,
+      gamesPlayed: (this.state.gamesPlayed + 1),
       deck: deck
     });
   }
@@ -86,7 +86,7 @@ class GameBoard extends Component {
       this.startGame();
       return;
     }
-    
+
     // we have a pair
     if (state.chosenCards.length === this.props.matchSetSize) {
       let card1 = state.chosenCards[0],
@@ -107,7 +107,7 @@ class GameBoard extends Component {
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});
-  
+
         setTimeout(() => {
           card1.toggleOpen();
           card2.toggleOpen();
@@ -131,17 +131,19 @@ class GameBoard extends Component {
 
     if (state.deck !== null) {
       body = state.deck.cards.map((n, i) => (
-        <Card 
+        <Card
           key={i + (state.deck.size * state.gamesPlayed)}
           value={n}
-          index={i} 
+          index={i}
           onClick={(card) => this.handleCardClick(card)} />
       ));
     } else {
-      body = (<section id="intro">
-        <h1>{"Welcome to the Memory Game!"}</h1>
-        <p>{"Match all pairs & win. Press above to get started!"}</p>
-      </section>);
+      body = (
+        <section id="intro">
+          <h1>{"Welcome to the Memory Game!"}</h1>
+          <p>{"Match all pairs & win. Press above to get started!"}</p>
+        </section>
+      );
     }
 
     return (
