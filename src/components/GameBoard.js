@@ -110,14 +110,14 @@ class GameBoard extends Component {
 
     this._checkGameState();
 
-    let state = this.state,
-      props = this.props,
-        body;
+    const state = this.state,
+      { deck, columns } = this.props;
 
-    if (props.deck !== null) {
-      body = props.deck.cards.map((n, i) => (
+    let body;
+    if (deck !== null) {
+      body = deck.cards.map((n, i) => (
         <Card
-          key={i + (props.deck.size)}
+          key={i + (deck.size)}
           value={n}
           index={i}
           onClick={(card) => this.handleCardClick(card)} />
@@ -131,12 +131,14 @@ class GameBoard extends Component {
       );
     }
 
+    const { snackbarOpen, snackbarCopy } = state;
+
     return (
       <div className={`board col-${this.props.columns}`}>
         {body}
         <Snackbar
-          open={state.snackbarOpen}
-          message={state.snackbarCopy}
+          open={snackbarOpen}
+          message={snackbarCopy}
           autoHideDuration={4000}
           onRequestClose={this.handleSnackbarHide} />
       </div>

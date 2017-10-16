@@ -14,7 +14,7 @@ import '../App.css';
 let CurrentGame = null;
 
 const AppContainer = ({ games, stats, createNewGame, endCurrentGame }) => {
-  
+
   if (!CurrentGame || (games.changed &&
         ((games.state === GameStates.ACTIVE && games.prevState !== games.state) ||  // new game
           (games.prevState === GameStates.ACTIVE && games.prevState !== games.state)))) {  // end game
@@ -24,14 +24,14 @@ const AppContainer = ({ games, stats, createNewGame, endCurrentGame }) => {
   }
 
   return (
-    <div className={'App' + (games.state === GameStates.ACTIVE ? ' started' : '')}>
+    <main className={'App' + (games.state === GameStates.ACTIVE ? ' started' : '')}>
       <AppToolbar
         stats={stats}
         gameState={games.state}
         onStartClick={() => createNewGame(24)}
         onEndClick={() => endCurrentGame()} />
       <CurrentGame />
-    </div>
+    </main>
   );
 
 };

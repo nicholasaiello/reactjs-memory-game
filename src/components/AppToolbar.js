@@ -9,11 +9,17 @@ import * as GameStates from '../constants/GameStates';
 
 const AppToolbar = ({ gameState, stats = {}, onStartClick, onEndClick }) => {
 
+  const bgColor = '#eefbff',
+    chipColor = '#101046',
+    avatarSize = 32;
+
+  const formatStat = (stat) => (stat || 0);
+
   let actions;
   if (gameState !== GameStates.ACTIVE) {
     actions = (<ToolbarGroup>
       <ToolbarSeparator />
-      <RaisedButton 
+      <RaisedButton
           className={"toolbar-btn"}
           label={"Start a Game"}
           primary={true}
@@ -24,22 +30,22 @@ const AppToolbar = ({ gameState, stats = {}, onStartClick, onEndClick }) => {
       <ToolbarSeparator />
         <Chip
           className={"toolbar-chip"}
-          backgroundColor={'#eefbff'}>
-          <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
-            {stats.attempts || 0}
+          backgroundColor={bgColor}>
+          <Avatar size={avatarSize} color={bgColor} backgroundColor={chipColor}>
+            {formatStat(stats.attempts)}
           </Avatar>
           {"Attempts"}
         </Chip>
         <Chip
           className={"toolbar-chip"}
-          backgroundColor={'#eefbff'}>
-          <Avatar size={32} color={'#eefbff'} backgroundColor={'#101046'}>
-            {stats.matches || 0}
+          backgroundColor={bgColor}>
+          <Avatar size={avatarSize} color={bgColor} backgroundColor={chipColor}>
+            {formatStat(stats.matches)}
           </Avatar>
           {"Matches"}
         </Chip>
         <ToolbarSeparator />
-        <RaisedButton 
+        <RaisedButton
           className={"toolbar-btn"}
           label={"End Game"}
           primary={false}

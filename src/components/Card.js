@@ -33,7 +33,7 @@ class Card extends Component {
     let body = '',
       className = 'card',
       onClick = () => { this.handleClick() };
-    
+
     if (this.state.open) {
       body = (<div>{this.props.value}</div>);
       className += ' open' + (this.state.matched ? ' matched' : '');
@@ -41,9 +41,9 @@ class Card extends Component {
     }
 
     return (
-      <div className={className} onClick={onClick}>
+      <figure className={className} onClick={onClick}>
         {body}
-      </div>
+      </figure>
     );
 
   }
