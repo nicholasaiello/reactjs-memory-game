@@ -1,21 +1,15 @@
-import { NEW_GAME, DEFAULT_CARD, FLIP_CARD, MATCH_CARD, NO_MATCH_CARD } from '../constants/ActionTypes';
+import { NEW_GAME, END_GAME } from '../constants/ActionTypes';
+import Deck from '../components/Deck';
 
-
-const initialState = [];
+const initialState = null;
 
 export default function cards(state = initialState, action) {
 
   switch(action.type) {
-    case DEFAULT_CARD:
-      return {};
-    case FLIP_CARD:
-      return {}
-    case MATCH_CARD:
-      return {};
-    case NO_MATCH_CARD:
-      return {};
     case NEW_GAME:
-      return [];
+      return Deck.create(action.size);
+    case END_GAME:
+      return null;
     default:
       return state;
   }

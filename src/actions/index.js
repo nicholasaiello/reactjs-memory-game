@@ -1,39 +1,32 @@
 import * as types from '../constants/ActionTypes'
 
-const newGame = () => {
-  return { type: types.NEW_GAME }
+const newGame = (size = 12) => {
+  return { type: types.NEW_GAME, size }
 };
 
-export const createNewGame = () => (dispatch, getState) => {
-  dispatch(newGame());
+export const createNewGame = (size) => (dispatch, getState) => {
+  dispatch(newGame(size));
 };
 
 const endGame = () => ({ type: types.END_GAME });
 
 export const endCurrentGame = () => (dispatch, getState) => {
   if (window.confirm('Are you sure you want to stop playing?')) {
-    setTimeout(() => {
+    // requestIdleCallback
+    requestAnimationFrame(() => {
       dispatch(endGame());
-    }, 1);
+    });
   }
 };
 
 export const wonCurrentGame = () => (dispatch, getState) => {
-  if (window.prompt("You won, congratulations!")) {
-    setTimeout(() => {
-      dispatch(endGame());
-    }, 1);
-  }
+  window.alert('You won, congratulations!');
+  // requestIdleCallback
+  requestAnimationFrame(() => {
+    dispatch(endGame());
+  });
 };
 
 export const updateStats = (stat, value) => (dispatch, getState) => (
   dispatch({ type: types.UPDATE_STATS, stat, value })
 );
-
-
-
-export const defaultCard = (card) => ({ type: types.DEFAULT_CARD, card });
-export const flipCard = (card) => ({ type: types.FLIP_CARD, card });
-export const matchCard = (card) => ({ type: types.MATCH_CARD, card });
-// FIXME might not need
-export const noMatchCard = (card) => ({ type: types.NO_MATCH_CARD, card });

@@ -1,49 +1,54 @@
-import React from 'react';
+/**
+ * Deck of cards prototype
+ */
+const Deck = {
 
-class Deck {
+  create: function(size = 24, matchSetSize = 2) {
+    let _size = size,
+      _dealt = false,
+      _matchSetSize = matchSetSize,
+      _cards = Array(size);
 
-  constructor(size = 24, matchSetSize = 2) {
-    this._size = size;
-    this._matchSetSize = matchSetSize;
-    this._cards = Array(size);
-  }
-  
-  get cards() {
-    return this._cards;
-  }
-
-  get size() {
-    return this._size;
-  }
-
-  deal(shuffle = true) {
-    let matches = this._size / this._matchSetSize;
-    this._cards = this._cards.fill(0).map((n, i) => (
-        (i % matches) + 1  // no zeros
+    const _deal = (shuffle = true) => {
+      let matches = _size / _matchSetSize;
+      _cards = _cards.fill(0).map((n, i) => (
+          (i % matches) + 1  // no zeros
+        )
       )
-    )
 
-    if (shuffle) {
-      this._cards = this.shuffle();
-    }
-  }
+      if (shuffle) {
+        _cards = _shuffle();
+      }
 
-  shuffle(shuffles = 7) {
-    let shuffled = this._cards.slice(),
-      size = shuffled.length;
-
-    for (let i = 0; i < shuffles; i++) {
-      shuffled.forEach((value, j) => {
-        let rand = Math.floor(Math.random() * size);
-
-        shuffled[j] = shuffled[rand];
-        shuffled[rand] = value;
-      });
+      _dealt = true;
     }
 
-    return shuffled;
+    const _shuffle = (shuffles = 7) => {
+      let shuffled = _cards.slice(),
+        size = shuffled.length;
+
+      for (let i = 0; i < shuffles; i++) {
+        shuffled.forEach((value, j) => {
+          let rand = Math.floor(Math.random() * size);
+
+          shuffled[j] = shuffled[rand];
+          shuffled[rand] = value;
+        });
+      }
+
+      return shuffled;
+    }
+
+    // public interface
+    return {
+      get dealt() { return _dealt; },
+      get size() { return _size; },
+      get cards() { return _cards; },
+      deal: _deal,
+      shuffle: _shuffle
+    };
   }
 
-}
+};
 
 export default Deck;

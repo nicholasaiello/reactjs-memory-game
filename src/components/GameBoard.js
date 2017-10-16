@@ -12,7 +12,7 @@ class GameBoard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...this.initialState, gamesPlayed: 0, deck: null};
+    this.state = { ...this.initialState, gamesPlayed: 0 };
   }
 
   get initialState() {
@@ -30,29 +30,11 @@ class GameBoard extends Component {
   )
 
   hasWonGame = () => (
-    this.isGameActive() && this.state.matches.length === (this.state.deck || []).size
+    this.isGameActive() && this.state.matches.length === this.props.deck.size
   )
 
   startGame = () => {
-    let deck = new Deck(this.props.rows * this.props.columns);
-    deck.deal();
-
-    this.setState({ deck: deck });
-  }
-
-  restartGame = () => {
-    let deck = new Deck(this.props.rows * this.props.columns);
-    deck.deal();
-
-    this.setState({
-      ...this.initialState,
-      gamesPlayed: (this.state.gamesPlayed + 1),
-      deck: deck
-    });
-  }
-
-  endGame = () => {
-    this.setState({ ...this.initialState, deck: null });
+    this.props.deck.deal();
   }
 
   showSnackbar = (copy) => {
@@ -80,9 +62,10 @@ class GameBoard extends Component {
   }
 
   _checkGameState = () => {
-    let state = this.state;
+    let state = this.state,
+      props = this.props;
 
-    if (!state.deck && this.isGameActive()) {  // game started
+    if ((props.deck && !props.deck.dealt) && this.isGameActive()) {
       this.startGame();
       return;
     }
@@ -102,8 +85,8 @@ class GameBoard extends Component {
         setTimeout(() => {
           card1.markAsMatched();
           card2.markAsMatched();
-          this.handleStatChanged('matches', this.state.matches.length / this.props.matchSetSize);
-        }, this.props.matchedTimeout);
+          this.handleStatChanged('matches', this.state.matches.length / props.matchSetSize);
+        }, props.matchedTimeout);
       } else {
         let attempts = this.state.attempts + 1;
         this.setState({attempts: attempts, chosenCards: []});
@@ -112,14 +95,14 @@ class GameBoard extends Component {
           card1.toggleOpen();
           card2.toggleOpen();
           this.handleStatChanged('attempts', this.state.attempts);
-        }, this.props.defaultTimeout);
+        }, props.defaultTimeout);
       }
     }
 
     if (this.hasWonGame()) { // GAME OVER
       setTimeout(() => {
-        this.props.onWonGame();
-      }, this.props.defaultTimeout);
+        props.onWonGame();
+      }, props.defaultTimeout);
     }
   }
 
@@ -127,19 +110,21 @@ class GameBoard extends Component {
 
     this._checkGameState();
 
-    let state = this.state, body;
+    let state = this.state,
+      props = this.props,
+        body;
 
-    if (state.deck !== null) {
-      body = state.deck.cards.map((n, i) => (
+    if (props.deck !== null) {
+      body = props.deck.cards.map((n, i) => (
         <Card
-          key={i + (state.deck.size * state.gamesPlayed)}
+          key={i + (props.deck.size)}
           value={n}
           index={i}
           onClick={(card) => this.handleCardClick(card)} />
       ));
     } else {
       body = (
-        <section id="intro">
+        <section id={"intro"}>
           <h1>{"Welcome to the Memory Game!"}</h1>
           <p>{"Match all pairs & win. Press above to get started!"}</p>
         </section>
