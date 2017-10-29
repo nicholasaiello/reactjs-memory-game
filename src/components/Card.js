@@ -4,7 +4,7 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.initialState;
+    this.state = {...this.initialState, ...props};
   }
 
   get initialState() {

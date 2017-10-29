@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card object card facing down 1`] = `
+<figure
+  className="card"
+  onClick={[Function]}
+>
+  
+</figure>
+`;
+
+exports[`Card object card facing up 1`] = `
+<figure
+  className="card open"
+  onClick={[Function]}
+>
+  <div>
+    7
+  </div>
+</figure>
+`;
+
+exports[`Card object card matched 1`] = `
+<figure
+  className="card open matched"
+  onClick={[Function]}
+>
+  <div>
+    7
+  </div>
+</figure>
+`;

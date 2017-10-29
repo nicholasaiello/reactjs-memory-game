@@ -1,5 +1,3 @@
-import assert from 'assert';
-
 import React from 'react';
 import renderer from 'react-test-renderer';
 
@@ -18,7 +16,7 @@ describe('AppToolbar', () => {
       </MuiThemeProvider>
     );
 
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -32,7 +30,7 @@ describe('AppToolbar', () => {
       </MuiThemeProvider>
     );
 
-    let tree = component.toJSON();
+    const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
